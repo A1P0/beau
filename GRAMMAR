@@ -1,0 +1,29 @@
+(* lone EBNF grammar *)
+
+program = { definition } ;
+
+definition = vardef | funcdef ;
+
+vardef  = name, [ "@" ], name, [ literal ], { ",", name, [ literal ] }, ";" ;
+
+literal = num_lit | char_lit | str_lit | bool_lit | "null" ;
+
+num_lit = digit, { digit } ;
+
+char_lit = "'", { char }, "'" ;
+
+str_lit = '"', { char }, '"' ;
+
+bool_lit = "true" | "false" ;
+
+name    = alpha, { alpha | digit } ;
+
+digit   = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+
+alpha   = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L"
+        | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X"
+        | "Y" | "Z" | "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j"
+        | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v"
+        | "w" | "x" | "y" | "z" | "_" ;
+
+char    = ? all ASCII characters ? ;
