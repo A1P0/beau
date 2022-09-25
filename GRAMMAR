@@ -6,10 +6,13 @@ include = "include", [ name | str_lit ], { ",", (name | str_lit) }, ";" ;
 
 definition = { vardef | funcdef } ;
 
-vardef  = name, [ "@" ], name, [ literal ], { ",", name, [ literal ] }, ";" ;
+vardef  = name, [ "@" ], name, [ "[", [literal], "]" ], [ literal ],
+        { ",", name, [ "[" [ literal ], "]" ], [ literal ] }, ";" ;
 
 funcdef = name, [ "@" ], name, "(", [ name, [ "@" ], name, [ ":", literal ]
         { ",", name, [ "@" ], name, [ ":", literal ] } ], ")", statement;
+
+(* TODO: structs, unions, enums, etc. *)
 
 statement     = label_stmt | block_stmt | if_stmt | while_stmt | switch_stmt
               | case_stmt | break_stmt | goto_stmt | ret_stmt | rval_stmt ;
