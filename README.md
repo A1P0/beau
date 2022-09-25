@@ -7,13 +7,18 @@ I intend to match C's capability with some unique style.
 
 ## TODO
 
-- [ ] Define a grammar to start with
-- [ ] Write some examples to define syntax and semantics more
-- [ ] Implementation...
+- [x] Define a grammar to start with
+- [ ] Lexer
+- [ ] Parser
+- [ ] Code generation
 
 ## Grammar
 
 Check the EBNF grammar in `GRAMMAR`.
+
+## Examples
+
+Check some examples of what I'm going for in `examples.l1`.
 
 ## License
 

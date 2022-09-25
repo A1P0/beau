@@ -1,5 +1,5 @@
 /* Example syntaxes of L1 */
-include std.io; /* compile time includes */
+include stdio; /* compile time includes */
 include "mymodule";
 
 /* Global variables initialized with colon.

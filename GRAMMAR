@@ -1,27 +1,30 @@
 (* L1 EBNF grammar *)
 
-program = { definition } ;
+program = { definition | include } ;
+
+include = "include", [ name | str_lit ], { ",", (name | str_lit) }, ";" ;
 
 definition = { vardef | funcdef } ;
 
 vardef  = name, [ "@" ], name, [ literal ], { ",", name, [ literal ] }, ";" ;
 
-funcdef = name, [ "@" ], name, "(", [ name, [ "@" ], name,
-        { ",", name, [ "@" ], name } ], ")", statement;
+funcdef = name, [ "@" ], name, "(", [ name, [ "@" ], name, [ ":", literal ]
+        { ",", name, [ "@" ], name, [ ":", literal ] } ], ")", statement;
 
-statement   = label_stmt | block_stmt | if_stmt | while_stmt | switch_stmt
-            | case_stmt | break_stmt | goto_stmt | ret_stmt | rval_stmt ;
+statement     = label_stmt | block_stmt | if_stmt | while_stmt | switch_stmt
+              | case_stmt | break_stmt | goto_stmt | ret_stmt | rval_stmt ;
 
-label_stmt  = name, ":", stmt ;
-block_stmt  = "{", stmt, "}" ;
-if_stmt     = "if", "(", rvalue, ")", stmt, [ "else", stmt ] ;
-while_stmt  = "while", "(", rvalue, ")", stmt ;
-switch_stmt = "switch", rvalue, stmt ;
-case_stmt   = "case", literal, ":", stmt ;
-break_stmt  = "break", ";" ;
-goto_stmt   = "goto", rvalue, ";" ;
-ret_stmt    = "ret", [ rvalue ], ";" ;
-rval_stmt   = [ rvalue ], ";" ;
+label_stmt    = name, ":", stmt ;
+block_stmt    = "{", stmt, "}" ;
+if_stmt       = "if", "(", rvalue, ")", stmt, [ "else", stmt ] ;
+while_stmt    = "while", "(", rvalue, ")", stmt ;
+switch_stmt   = "switch", rvalue, stmt ;
+case_stmt     = "case", literal, ":", stmt ;
+break_stmt    = "break", ";" ;
+continue_stmt = "continue", ";" ;
+goto_stmt     = "goto", rvalue, ";" ;
+ret_stmt      = "ret", [ rvalue ], ";" ;
+rval_stmt     = [ rvalue ], ";" ;
 
 rvalue  = "(", rvalue, ")"
         | lvalue
@@ -35,11 +38,11 @@ rvalue  = "(", rvalue, ")"
         | rvalue, "?", rvalue, ":", rvalue
         | rvalue, "(", { rvalue, { ",", rvalue  } }, ")" ;
 
-assign  = "=-"
-        | "=+"
-        | "=%"
-        | "=*"
-        | "=/" ;
+assign  = "-="
+        | "+="
+        | "%="
+        | "*="
+        | "/=" ;
 
 inc_dec = "++"
         | "--" ;
