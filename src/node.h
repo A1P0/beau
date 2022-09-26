@@ -52,4 +52,22 @@
         X(N_VARDEF)     \
         X(N_INCLUDE)
 
+/* Types of nodes */
+typedef enum nodetype {
+        #define X(y) y,
+                NODETYPES
+        #undef X
+} nodetype;
+
+/* node object */
+typedef struct node {
+        nodetype type;          /* type of node */
+        tok *token;             /* associate token */
+        char *string;           /* associated string */
+        struct node *left;      /* left child */
+        struct node *middle;    /* middle child */
+        struct node *right;     /* right child */
+        struct node *next;      /* next sibling if list */
+} node;
+
 #endif

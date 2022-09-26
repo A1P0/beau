@@ -10,6 +10,7 @@
 #include "lex.h"
 #include "tok.h"
 
+/* strings representing token types */
 const char *tokstr[] = {
         #define X(y) #y,
                 TOKTYPES
