@@ -32,7 +32,8 @@ lfatal(const char *format, ...)
 
         va_start(args, format);
 
-        fprintf(stderr, "%s: FATAL: ", arg0);
+        /* FATAL in red */
+        fprintf(stderr, "%s: \x1b[31mFATAL:\x1b[0m ", arg0);
         vfprintf(stderr, format, args);
         fprintf(stderr, "\n");
 

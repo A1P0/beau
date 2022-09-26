@@ -30,8 +30,8 @@
         X(T_PERCENT)    \
         X(T_PLUS)       \
         X(T_MINUS)      \
-        X(T_SHIFT_RIGHT)\
         X(T_SHIFT_LEFT) \
+        X(T_SHIFT_RIGHT)\
         X(T_GTHAN_EQTO) \
         X(T_GTHAN)      \
         X(T_LTHAN_EQTO) \
@@ -40,16 +40,19 @@
         X(T_OR)         \
         X(T_NOTEQUAL)   \
         X(T_ISEQUAL)    \
-        X(T_BITWISE_AND)\
-        X(T_BITWISE_OR) \
+        X(T_AMPER)      \
+        X(T_PIPE)       \
         X(T_NOT)        \
         X(T_INC)        \
         X(T_DEC)        \
+        X(T_ASSIGN)     \
         X(T_ASSIGN_SUB) \
         X(T_ASSIGN_ADD) \
         X(T_ASSIGN_MOD) \
         X(T_ASSIGN_MUL) \
         X(T_ASSIGN_DIV) \
+        X(T_ASSIGN_AND) \
+        X(T_ASSIGN_OR)  \
         X(T_RET)        \
         X(T_GOTO)       \
         X(T_CONTINUE)   \

@@ -1,7 +1,7 @@
 # Lone/L1
 ###### **L**anguage **one**, L1
 
-Lone/L1 is a language I am defining and implementing for learning purposes,
+L1 is a language I am defining and implementing for learning purposes,
 but also an interest in seeing some of my ideas applied. L1 will be very C-like,
 I intend to match C's capability with some unique style.
 

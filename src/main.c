@@ -8,7 +8,7 @@
 
 /* How lone was invoked */
 char *arg0;
-
+extern char *tokstr[];
 int /* volatile testing */
 main(int argc, char *argv[])
 {
@@ -24,6 +24,7 @@ main(int argc, char *argv[])
 
         t = lex(l);
         while (t != NULL) {
+                printf("%s\n", tokstr[t->type]);
                 t = lex(l);
         }
 
