@@ -8,7 +8,8 @@ I intend to match C's capability with some unique style.
 ## TODO
 
 - [x] Define a grammar to start with
-- [ ] Lexer
+- [x] Lexer
+        - Some little bits missing that will be completed at a later stage.
 - [ ] Parser
 - [ ] Code generation
 

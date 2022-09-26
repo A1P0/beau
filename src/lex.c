@@ -22,14 +22,82 @@ lgetc(lexer *l)
         l->ch = fgetc(l->file);
 }
 
+static void /* retrieve string value of token from file, tok->string */
+getstr(lexer *l, tok *t)
+{
+        long ret;
+
+        ret = ftell(l->file);
+
+        t->string = lalloc(t->length+1);
+
+        fseek(l->file, t->offset, SEEK_SET);
+
+        fread(t->string, 1, t->length, l->file);
+
+        fseek(l->file, ret, SEEK_SET);
+}
+
+static void /* test T_NAME to see if a keyword and adjust token */
+keyword(lexer *l, tok *t)
+{
+        if (!strcmp(t->string, "true"))
+                t->type = T_TRUE;
+
+        if (!strcmp(t->string, "false"))
+                t->type = T_FALSE;
+
+        if (!strcmp(t->string, "null"))
+                t->type = T_NULL;
+
+        if (!strcmp(t->string, "and"))
+                t->type = T_AND;
+
+        if (!strcmp(t->string, "or"))
+                t->type = T_OR;
+
+        if (!strcmp(t->string, "ret"))
+                t->type = T_RET;
+
+        if (!strcmp(t->string, "goto"))
+                t->type = T_GOTO;
+
+        if (!strcmp(t->string, "continue"))
+                t->type = T_CONTINUE;
+
+        if (!strcmp(t->string, "break"))
+                t->type = T_BREAK;
+
+        if (!strcmp(t->string, "case"))
+                t->type = T_CASE;
+
+        if (!strcmp(t->string, "switch"))
+                t->type = T_SWITCH;
+
+        if (!strcmp(t->string, "while"))
+                t->type = T_WHILE;
+
+        if (!strcmp(t->string, "if"))
+                t->type = T_IF;
+
+        if (!strcmp(t->string, "else"))
+                t->type = T_ELSE;
+
+        if (!strcmp(t->string, "include"))
+                t->type = T_INCLUDE;
+}
+
 static void /* test for a name */
 name(lexer *l, tok *t)
 {
         if ((l->ch >= 'a' && l->ch <= 'z') || (l->ch >= 'A' && l->ch <= 'Z')
         || l->ch == '_') {
 
-                t->offset = ftell(l->file);
+                t->offset = ftell(l->file) - 1;
                 t->length = 1;
+                t->line = l->line;
+
+                lgetc(l);
 
                 while ((l->ch >= 'a' && l->ch <= 'z')
                 || (l->ch >= 'A' && l->ch <= 'Z')
@@ -40,11 +108,86 @@ name(lexer *l, tok *t)
                         lgetc(l);
 
                 }
-                /* todo: get string */
+
                 t->type = T_NAME;
+                getstr(l, t);
+                /* is it a keyword? */
+                keyword(l, t);
         }
         
         return;
+}
+
+static void /* test for a decimal literal */
+declit(lexer *l, tok *t)
+{
+        if (l->ch >= '1' && l->ch <= '9') {
+
+                t->type = T_DEC_LIT;
+                t->length = 1;
+                t->offset = ftell(l->file) - 1;
+                t->line = l->line;
+
+                lgetc(l);
+                while (l->ch >= '0' && l->ch <= '9') {
+                        t->length++;
+                        lgetc(l);
+                }
+
+                getstr(l, t);
+        }
+
+        /* temporary until I lex hex, binary, etc... */
+        if (l->ch == '0') {
+                t->type = T_DEC_LIT;
+                t->offset = ftell(l->file) - 1;
+                t->length = 1;
+                t->line = l->line;
+
+                lgetc(l);
+                getstr(l, t);
+        }
+
+        return;
+}
+
+static void /* check for a string literal */
+strlit(lexer *l, tok *t)
+{
+        char last = ' ';
+
+        if (l->ch != '"')
+                return;
+
+        t->type = T_STR_LIT;
+        t->offset = ftell(l->file);
+        t->length = 0;
+        t->line = l->line;
+
+        lgetc(l);
+        while (l->ch != EOF) {
+                if (l->ch == '"' && last != '\\')
+                        break;
+
+                if (l->ch == '\n')
+                        l->line++;
+
+                t->length++;
+                last = l->ch;
+                lgetc(l);
+        }
+
+        if (l->ch == EOF) {
+                lfatal("%s: Line %d: String literal missing closing quote!",
+                        l->name, l->line);
+        }
+
+        lgetc(l);
+
+        t->string = NULL;
+
+        if (t->length > 0)
+                getstr(l, t);
 }
 
 tok * /* Returns next token */
@@ -288,6 +431,16 @@ lex(lexer *l)
 
         /* test for a name */
         name(l, t);
+        if (t->type != T_NONE)
+                return t;
+
+        /* test for a decimal literal */
+        declit(l, t);
+        if (t->type != T_NONE)
+                return t;
+
+        /* test for a string literal */
+        strlit(l, t);
         if (t->type != T_NONE)
                 return t;
 
