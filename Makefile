@@ -1,5 +1,5 @@
-lone: bin/main.o bin/lone.o bin/lex.o bin/parse.o
-	cc bin/main.o bin/lone.o bin/lex.o bin/parse.o -o lone
+lone: bin/main.o bin/lone.o bin/lex.o bin/parse.o bin/rvalue.o
+	cc bin/main.o bin/lone.o bin/lex.o bin/parse.o bin/rvalue.o -o lone
 
 bin/main.o: src/main.c
 	cc -c src/main.c -o bin/main.o
@@ -12,6 +12,9 @@ bin/lex.o: src/lex.c
 
 bin/parse.o: src/parse.c
 	cc -c src/parse.c -o bin/parse.o
+
+bin/rvalue.o: src/rvalue.c
+	cc -c src/rvalue.c -o bin/rvalue.o
 
 clean:
 	rm lone bin/*.o

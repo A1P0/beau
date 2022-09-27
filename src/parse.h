@@ -16,6 +16,7 @@ typedef struct parser {
         node *tree;     /* root of tree */
 } parser;
 
+void plex(parser *p);
 node *parse(char *filename);
 void nprint(node *n, int indent);
 #endif

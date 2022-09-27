@@ -4,9 +4,11 @@
  */
 #ifndef _NODE_H_
 #define _NODE_H_
+#include <stdbool.h>
 
 #define NODETYPES \
         X(N_NONE)       \
+        X(N_NAME)       \
         X(N_LVALUE)     \
         X(N_LITERAL)    \
         X(N_DIV)        \
@@ -50,7 +52,8 @@
         X(N_BLOCK)      \
         X(N_FUNCDEF)    \
         X(N_VARDEF)     \
-        X(N_INCLUDE)
+        X(N_INCLUDE)    \
+        X(N_AT)         
 
 /* Types of nodes */
 typedef enum nodetype {
@@ -62,12 +65,15 @@ typedef enum nodetype {
 /* node object */
 typedef struct node {
         nodetype type;          /* type of node */
-        tok *token;             /* associate token */
-        char *string;           /* associated string */
+        tok *token;             /* associated token */
         struct node *left;      /* left child */
         struct node *middle;    /* middle child */
         struct node *right;     /* right child */
         struct node *next;      /* next sibling if list */
+        /* For definitions */
+        char *datatype;             /* type string */
+        char *name;             /* name string */
+        bool ptr;               /* is it a ptr? */
 } node;
 
 #endif

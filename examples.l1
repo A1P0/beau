@@ -19,7 +19,7 @@ byte @ message: "Example!!!";
 */
 
 byte
-main()
+main():
 {
         writeln(message);
         /* return is changed to ret */
@@ -28,7 +28,7 @@ main()
 
 /* Functions can have default argument values */
 byte
-add(byte x: 0, byte y: 0)
+add(byte x: 0, byte y: 0):
 {
         ret x + y;
 }

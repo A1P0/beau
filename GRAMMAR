@@ -2,15 +2,14 @@
 
 program = { definition | include } ;
 
-include = "include", [ name | str_lit ], { ",", (name | str_lit) }, ";" ;
+include = "include", [ name | str_lit ], ";" ;
 
-definition = { vardef | funcdef } ;
+definition = { ( vardef, ";" ) | funcdef } ;
 
-vardef  = name, [ "@" ], name, [ "[", [literal], "]" ], [ literal ],
-        { ",", name, [ "[" [ literal ], "]" ], [ literal ] }, ";" ;
+vardef  = name, [ "@" ], name, [ ":", literal ] ;
 
-funcdef = name, [ "@" ], name, "(", [ name, [ "@" ], name, [ ":", literal ]
-        { ",", name, [ "@" ], name, [ ":", literal ] } ], ")", statement;
+funcdef = name, [ "@" ], name, "(", [ vardef, { ",", vardef } ], ")",
+        ( ( ":", statement) | ";" );
 
 (* TODO: structs, unions, enums, etc. *)
 
@@ -74,8 +73,7 @@ binary  = "|"
         | "/" ;
 
 lvalue  = name
-        | "@", rvalue
-        | rvalue, "[", rvalue, "]" ;
+        | "@", rvalue ;
 
 literal = num_lit | char_lit | str_lit | bool_lit | "null" ;
 
