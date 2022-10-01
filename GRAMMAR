@@ -40,7 +40,8 @@ rvalue  = "(", rvalue, ")"
         | rvalue, "?", rvalue, ":", rvalue
         | rvalue, "(", { rvalue, { ",", rvalue  } }, ")" ;
 
-assign  = "-="
+assign  = "="
+        | "-="
         | "+="
         | "%="
         | "*="

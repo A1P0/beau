@@ -32,11 +32,7 @@
         X(N_UNARY_NOT)  \
         X(N_INC)        \
         X(N_DEC)        \
-        X(N_ASSIGN_SUB) \
-        X(N_ASSIGN_ADD) \
-        X(N_ASSIGN_MOD) \
-        X(N_ASSIGN_MUL) \
-        X(N_ASSIGN_DIV) \
+        X(N_ASSIGN)     \
         X(N_CONDITIONAL)\
         X(N_FUNCALL)    \
         X(N_ADDRESSOF)  \
@@ -71,7 +67,7 @@ typedef struct node {
         struct node *right;     /* right child */
         struct node *next;      /* next sibling if list */
         /* For definitions */
-        char *datatype;             /* type string */
+        char *datatype;         /* type string */
         char *name;             /* name string */
         bool ptr;               /* is it a ptr? */
 } node;

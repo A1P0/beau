@@ -35,7 +35,7 @@ plex(parser *p)
         }
 }
 
-static node * /* num_lit | char_lit | str_lit | bool_lit | "null" ; */
+node * /* num_lit | char_lit | str_lit | bool_lit | "null" ; */
 literal(parser *p)
 {
         node *n = NULL;
@@ -46,9 +46,8 @@ literal(parser *p)
                 n = lalloc(sizeof(node));
                 n->type = N_LITERAL;
                 n->token = p->curr;
+                plex(p);
         }
-
-        plex(p);
 
         return n;
 }
@@ -316,24 +315,24 @@ nprint(node *n, int indent)
 
         for (i=0;i<indent;i++) putchar('\t');
 
-        printf("|->%s\n", nodestr[n->type]);
+        printf("%s\n", nodestr[n->type]);
 
         if (n->left != NULL) {
-                for (i=0;i<indent+1;i++) putchar('\t');
-                printf("|->LEFT:\n");
-                nprint(n->left, indent+2); 
+                for (i=0;i<indent;i++) putchar('\t');
+                printf(" |->L:\n");
+                nprint(n->left, indent+1); 
         }
 
         if (n->middle != NULL) {
-                for (i=0;i<indent+1;i++) putchar('\t');
-                printf("|->MIDDLE:\n");
-                nprint(n->middle, indent+2); 
+                for (i=0;i<indent;i++) putchar('\t');
+                printf(" |->M:\n");
+                nprint(n->middle, indent+1); 
         }
 
         if (n->right != NULL) {
-                for (i=0;i<indent+1;i++) putchar('\t');
-                printf("|->RIGHT:\n");
-                nprint(n->right, indent+2); 
+                for (i=0;i<indent;i++) putchar('\t');
+                printf(" |->R:\n");
+                nprint(n->right, indent+1); 
         }
 
         if (n->next != NULL) {
