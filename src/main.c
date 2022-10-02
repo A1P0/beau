@@ -64,7 +64,9 @@ main(int argc, char *argv[])
         arg0 = argv[0];
 
         while ((opt = getopt(argc, argv, "-:hl:p:")) != -1)  {
+
                 switch (opt) {
+
                 case 'h':
                         help();
                         return 0;
@@ -90,7 +92,9 @@ main(int argc, char *argv[])
                 case 1:
                         lfatal("Unexpected argument '%s'.", optarg);
                         break;
+                        
                 }
+
         }
 
         help();

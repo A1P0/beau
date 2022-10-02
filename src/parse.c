@@ -31,6 +31,7 @@ plex(parser *p)
         if (p->next == NULL) {
 
                 p->next = lalloc(sizeof(tok));
+
                 p->next->type = T_NONE;
                 p->next->line = p->l->line;
 
@@ -43,12 +44,15 @@ literal(parser *p)
         node *n = NULL;
 
         switch (p->curr->type) {
+
         case T_DEC_LIT: case T_CHAR_LIT: case T_STR_LIT: case T_TRUE:
         case T_FALSE: case T_NULL:
+
                 n = lalloc(sizeof(node));
                 n->type = N_LITERAL;
                 n->token = p->curr;
                 plex(p);
+
         }
 
         return n;
@@ -69,6 +73,7 @@ include(parser *p)
                         "statement.", p->l->name, p->curr->line);
 
         n = lalloc(sizeof(node));
+
         n->type = N_INCLUDE;
         n->token = p->curr;
 
@@ -92,6 +97,7 @@ vardef(parser *p)
                 return NULL;
 
         n = lalloc(sizeof(node));
+
         n->token = p->curr;
         n->datatype = p->curr->string;
         n->type = N_VARDEF;
@@ -206,6 +212,7 @@ definition(parser *p)
                 return NULL;
 
         n = lalloc(sizeof(node));
+        
         n->token = p->curr;
         n->datatype = p->curr->string;
         n->ptr = false;
@@ -388,7 +395,7 @@ nprint(node *n, int indent)
         if (n->left != NULL) {
 
                 for (i=0;i<indent;i++) putchar('\t');
-                        
+
                 printf(" |->L:\n");
                 nprint(n->left, indent+1); 
 

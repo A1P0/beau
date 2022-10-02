@@ -19,6 +19,7 @@ lvalue(parser *p)
 
         /* "@", rvalue */
         if (p->curr->type == T_AT) {
+
                 plex(p);
 
                 n = lalloc(sizeof(node));
@@ -28,24 +29,26 @@ lvalue(parser *p)
 
                 r = rvalue(p);
 
-                if (r == NULL) {
+                if (r == NULL)
                         lfatal("%s: Line %d: Expecting rvalue after @.",
                                 p->l->name, p->curr->line);
-                }
 
                 n->right = r;
 
                 return n;
+
         }
 
         /* name */
         if (p->curr->type == T_NAME) {
 
                 n = lalloc(sizeof(node));
+
                 n->type = N_NAME;
                 n->token = p->curr;
 
                 plex(p);
+
                 return n;
 
         }
@@ -71,6 +74,7 @@ addressof(parser *p)
                         p->l->name, p->curr->line);
 
         n = lalloc(sizeof(node));
+
         n->type = N_ADDRESSOF;
         n->right = lval;
 
@@ -192,6 +196,7 @@ static char
 precedence(nodetype t)
 {
         switch (t) {
+
         case N_MUL: case N_DIV: case N_MOD:
                 return 10;
 
@@ -210,6 +215,7 @@ precedence(nodetype t)
 
         case N_BITWISE_AND: case N_BITWISE_OR:
                 return 5;
+
         }
 
         return 11;
@@ -223,21 +229,37 @@ binary(parser *p, node *l)
         nodetype t = N_NONE;
 
         switch (p->curr->type) {
+
                 case T_PIPE: t = N_BITWISE_OR; break;
+
                 case T_AMPER: t = N_BITWISE_AND; break;
+
                 case T_ISEQUAL: t = N_ISEQUAL; break;
+
                 case T_NOTEQUAL: t = N_NOTEQUAL; break;
+
                 case T_LTHAN: t = N_LTHAN; break;
+
                 case T_LTHAN_EQTO: t = N_LTHAN_EQTO; break;
+
                 case T_GTHAN: t = N_GTHAN; break;
+
                 case T_GTHAN_EQTO: t = N_GTHAN_EQTO; break;
+
                 case T_SHIFT_LEFT: t = N_SHIFT_LEFT; break;
+
                 case T_SHIFT_RIGHT: t = N_SHIFT_RIGHT; break;
+
                 case T_MINUS: t = N_SUB; break;
+
                 case T_PLUS: t = N_ADD; break;
+
                 case T_PERCENT: t = N_MOD; break;
+
                 case T_ASTERISK: t = N_MUL; break;
+
                 case T_SLASH: t = N_DIV; break;
+
         }
 
         if (t == N_NONE) return NULL;

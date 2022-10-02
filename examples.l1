@@ -1,34 +1,22 @@
-/* Example syntaxes of L1 */
-include stdio; /* compile time includes */
-include "mymodule";
+/*
+ * examples.l1
+ */
+include stdio;
 
-/* Global variables initialized with colon.
-   Pointer syntax is @ instead of *
-        As in: there is a byte @ (at) the address being referenced 
-  Address-of operator is %. eg:
-        x = %y 
-  x is assigned the address of y */
-byte @ message: "Example!!!";
-
-/* Numeric data types that are clearly what they are:
-        byte, word, dword, qword, etc... 
-  Not i8 ... i64 because I think that's ugly.
-  Also of course unsigned types:
-        ubyte ... uqword
-  Boolean: bool
-*/
-
-byte
-main():
+void
+writeln(byte @str):
 {
-        writeln(message);
-        /* return is changed to ret */
-        ret add(41, 1);
+        write(str);
+        write("\n");
 }
 
-/* Functions can have default argument values */
-byte
+byte /* add x and y */
 add(byte x: 0, byte y: 0):
-{
         ret x + y;
+
+byte /* Entry point */
+main():
+{
+        writeln("Hello, World!");
+        ret add(40, 2);
 }
