@@ -3,7 +3,7 @@
  */
 include stdio;
 
-byte fuck;
+byte fuck : 12;
 
 void /* entry point */
 main():
