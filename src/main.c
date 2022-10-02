@@ -36,8 +36,11 @@ lexopt(char *filename)
         printf("%-12s%12s%24s\n", "TOKEN TYPE", "LINE", "STRING");
 
         while (t != NULL) {
+
                 printf("%-12s%12d%24s\n", tokstr[t->type], t->line, t->string);
+
                 t = lex(l);
+                
         }
 
         lex_close(l);

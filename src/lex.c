@@ -131,8 +131,11 @@ declit(lexer *l, tok *t)
 
                 lgetc(l);
                 while (l->ch >= '0' && l->ch <= '9') {
+
                         t->length++;
+
                         lgetc(l);
+
                 }
 
                 getstr(l, t);
@@ -140,6 +143,7 @@ declit(lexer *l, tok *t)
 
         /* temporary until I lex hex, binary, etc... */
         if (l->ch == '0') {
+
                 t->type = T_DEC_LIT;
                 t->offset = ftell(l->file) - 1;
                 t->length = 1;
@@ -147,6 +151,7 @@ declit(lexer *l, tok *t)
 
                 lgetc(l);
                 getstr(l, t);
+
         }
 
         return;
@@ -167,6 +172,7 @@ strlit(lexer *l, tok *t)
 
         lgetc(l);
         while (l->ch != EOF) {
+
                 if (l->ch == '"' && last != '\\')
                         break;
 
@@ -176,12 +182,12 @@ strlit(lexer *l, tok *t)
                 t->length++;
                 last = l->ch;
                 lgetc(l);
+
         }
 
-        if (l->ch == EOF) {
+        if (l->ch == EOF)
                 lfatal("%s: Line %d: String literal missing closing quote!",
                         l->name, l->line);
-        }
 
         lgetc(l);
 
@@ -204,11 +210,13 @@ lex(lexer *l)
 
         /* loop over whitespace */
         while (l->ch == ' ' || l->ch == '\t' || l->ch == '\n') {
+
                 /* line count */
                 if (l->ch == '\n')
                         l->line++;
 
                 lgetc(l);
+
         }
 
         /* test for comment, /, and /= */
@@ -222,8 +230,11 @@ lex(lexer *l)
                         while (l->ch != EOF) {
                                 
                                 if (l->ch == '/' && last == '*') {
+
                                         lgetc(l);
+
                                         break;
+
                                 }
 
                                 if (l->ch == '\n')
@@ -233,10 +244,9 @@ lex(lexer *l)
                                 lgetc(l);
                         }
 
-                        if (l->ch == EOF) {
+                        if (l->ch == EOF)
                                 lfatal("%s: Line %d: Comment not closed.",
                                         l->name, l->line);
-                        }
 
                         goto whitespace;
 
@@ -251,8 +261,11 @@ lex(lexer *l)
                 t->type = T_SLASH;
 
                 if (l->ch == '=') {
+
                         t->type = T_ASSIGN_DIV;
+
                         lgetc(l);
+
                 }
 
                 return t;
@@ -280,9 +293,11 @@ lex(lexer *l)
         }
 
         if (t->type != T_NONE) {
+
                 lgetc(l);
 
                 return t;
+
         }
 
         /* conflict tokens/simple multi char */
@@ -292,13 +307,19 @@ lex(lexer *l)
                 lgetc(l);
 
                 if (l->ch == '+') {
+
                         t->type = T_INC;
+
                         lgetc(l);
+
                 }
 
                 if (l->ch == '=') {
+
                         t->type = T_ASSIGN_ADD;
+
                         lgetc(l);
+
                 }
 
                 return t;
@@ -308,13 +329,19 @@ lex(lexer *l)
                 lgetc(l);
 
                 if (l->ch == '-') {
+
                         t->type = T_DEC;
+
                         lgetc(l);
+
                 }
 
                 if (l->ch == '=') {
+
                         t->type = T_ASSIGN_SUB;
+
                         lgetc(l);
+
                 }
 
                 return t;
@@ -324,13 +351,19 @@ lex(lexer *l)
                 lgetc(l);
 
                 if (l->ch == '<') {
+
                         t->type = T_SHIFT_LEFT;
+
                         lgetc(l);
+
                 }
 
                 if (l->ch == '=') {
+
                         t->type = T_LTHAN_EQTO;
+
                         lgetc(l);
+
                 }
 
                 return t;
@@ -340,13 +373,19 @@ lex(lexer *l)
                 lgetc(l);
 
                 if (l->ch == '>') {
+
                         t->type = T_SHIFT_RIGHT;
+
                         lgetc(l);
+
                 }
 
                 if (l->ch == '=') {
+
                         t->type = T_GTHAN_EQTO;
+
                         lgetc(l);
+
                 }
 
                 return t;
@@ -356,8 +395,11 @@ lex(lexer *l)
                 lgetc(l);
 
                 if (l->ch == '=') {
+
                         t->type = T_NOTEQUAL;
+
                         lgetc(l);
+
                 }
 
                 return t;
@@ -367,8 +409,11 @@ lex(lexer *l)
                 lgetc(l);
 
                 if (l->ch == '=') {
+
                         t->type = T_ISEQUAL;
+
                         lgetc(l);
+
                 }
 
                 return t;
@@ -378,8 +423,11 @@ lex(lexer *l)
                 lgetc(l);
 
                 if (l->ch == '=') {
+
                         t->type = T_ASSIGN_DIV;
+
                         lgetc(l);
+
                 }
 
                 return t;
@@ -389,8 +437,11 @@ lex(lexer *l)
                 lgetc(l);
 
                 if (l->ch == '=') {
+
                         t->type = T_ASSIGN_MUL;
+
                         lgetc(l);
+
                 }
 
                 return t;
@@ -400,8 +451,11 @@ lex(lexer *l)
                 lgetc(l);
 
                 if (l->ch == '=') {
+
                         t->type = T_ASSIGN_MOD;
+
                         lgetc(l);
+
                 }
 
                 return t;
@@ -411,8 +465,11 @@ lex(lexer *l)
                 lgetc(l);
 
                 if (l->ch == '=') {
+
                         t->type = T_ASSIGN_AND;
+
                         lgetc(l);
+
                 }
 
                 return t;
@@ -422,8 +479,11 @@ lex(lexer *l)
                 lgetc(l);
 
                 if (l->ch == '=') {
+
                         t->type = T_ASSIGN_OR;
+
                         lgetc(l);
+                        
                 }
 
                 return t;

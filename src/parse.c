@@ -29,9 +29,11 @@ plex(parser *p)
         p->next = lex(p->l);
 
         if (p->next == NULL) {
+
                 p->next = lalloc(sizeof(tok));
                 p->next->type = T_NONE;
                 p->next->line = p->l->line;
+
         }
 }
 
@@ -97,14 +99,16 @@ vardef(parser *p)
         plex(p);
 
         if (p->curr->type == T_AT) {
+
                 n->ptr = true;
+
                 plex(p);
+
         }
 
-        if (p->curr->type != T_NAME) {
+        if (p->curr->type != T_NAME)
                 lfatal("%s: Line %d: Expecting a name for definition.",
                         p->l->name, p->curr->line);
-        }
 
         n->name = p->curr->string;
         plex(p);
@@ -128,14 +132,65 @@ static node *
 statement(parser *p)
 {
         node *n = NULL;
+        int line = 0;
 
+        /* null statement */
+        if (p->curr->type == T_SEMI) {
+
+                plex(p);
+
+                n = lalloc(sizeof(node));
+
+                n->type = N_NONE;
+
+                return n;
+
+        }
+
+        /* block_stmt */
+        if (p->curr->type == T_LBRACE) {
+
+                line = p->curr->line;
+
+                plex(p);
+
+                n = statement(p);
+
+                if (n != NULL)
+                        n->next = statement(p);
+
+                if (p->curr->type != T_RBRACE)
+                        lfatal("%s: Line %d: Started block statement missing "
+                                "closing }.", p->l->name, line);
+
+                plex(p);
+
+                if (n == NULL) {
+
+                        n = lalloc(sizeof(node));
+
+                        n->type = N_NONE;
+
+                }
+
+                return n;
+
+        }
+
+        /* rval_stmt */
         n = rvalue(p);
         if (n != NULL) {
+
                 if (p->curr->type != T_SEMI)
                         lfatal("%s: Line %d: Expecting a ; to end statement.",
                                 p->l->name,p->curr->line);
+
                 plex(p);
+
+                n->next = statement(p);
+
                 return n;
+
         }
 
         return n;
@@ -158,8 +213,11 @@ definition(parser *p)
         plex(p);
 
         if (p->curr->type == T_AT) {
+
                 n->ptr = true;
+
                 plex(p);
+
         }
 
         if (p->curr->type != T_NAME)
@@ -170,14 +228,18 @@ definition(parser *p)
         plex(p);
 
         if (p->curr->type == T_SEMI) {
+
                 /* vardef, no init */
                 n->type = N_VARDEF;
                 plex(p);
+
                 return n;
+
         }
 
         /* test for function */
         if (p->curr->type == T_LPAREN) {
+
                 plex(p);
                 n->left = vardef(p);
 
@@ -186,35 +248,40 @@ definition(parser *p)
                 /* potential list */
                 l = n->left;
                 while (p->curr->type == T_COMMA) {
+
                         plex(p);
+
                         l->next = vardef(p);
                         l = l->next;
+
                 }
 
                 /* ) */
-                if (p->curr->type != T_RPAREN) {
+                if (p->curr->type != T_RPAREN)
                         lfatal("%s: Line %d: Missing closing ) in function "
                                 "definition." , p->l->name, p->curr->line);
-                }
 
                 plex(p);
 
                 if (p->curr->type == T_SEMI) {
+
                         /* function prototype, finish up. */
                         plex(p);
+
                         return n;
+
                 }
 
-                if (p->curr->type != T_COLON) {
+                if (p->curr->type != T_COLON)
                         lfatal("%s: Line %d: Expecting ; or : in function "
                                 "definition.", p->l->name, p->curr->line);
-                }
 
                 plex(p);
 
                 n->right = statement(p);
 
                 return n;
+
         }
 
         /* extended variable definition? */
@@ -269,17 +336,18 @@ root(parser *p)
 
         /* see if there's more appended */
         last = tree;
-        while (last->next != NULL) {
+        while (last->next != NULL)
                 last = last->next;
-        }
 
         while (p->curr->type != T_NONE && last != NULL) {
+
                 last->next = program(p);
                 last = last->next;
+
                 /* see if there's more appended */
-                while (last->next != NULL) {
+                while (last->next != NULL)
                         last = last->next;
-                }
+
         }
 
         return tree;
@@ -318,25 +386,33 @@ nprint(node *n, int indent)
         printf("%s\n", nodestr[n->type]);
 
         if (n->left != NULL) {
+
                 for (i=0;i<indent;i++) putchar('\t');
+                        
                 printf(" |->L:\n");
                 nprint(n->left, indent+1); 
+
         }
 
         if (n->middle != NULL) {
+
                 for (i=0;i<indent;i++) putchar('\t');
+
                 printf(" |->M:\n");
                 nprint(n->middle, indent+1); 
+
         }
 
         if (n->right != NULL) {
+
                 for (i=0;i<indent;i++) putchar('\t');
+
                 printf(" |->R:\n");
                 nprint(n->right, indent+1); 
+
         }
 
-        if (n->next != NULL) {
+        if (n->next != NULL)
                 nprint(n->next, indent);
-        }
 
 }
