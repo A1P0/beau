@@ -1,0 +1,13 @@
+/*
+ * example.l1
+ */
+include stdio;
+
+byte fuck;
+
+void /* entry point */
+main():
+{
+        writeln("Hello, World!");
+        ret;
+}

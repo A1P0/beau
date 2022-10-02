@@ -5,6 +5,7 @@
 #ifndef _NODE_H_
 #define _NODE_H_
 #include <stdbool.h>
+#include "tok.h"
 
 #define NODETYPES \
         X(N_NONE)       \
@@ -49,7 +50,8 @@
         X(N_FUNCDEF)    \
         X(N_VARDEF)     \
         X(N_INCLUDE)    \
-        X(N_AT)         
+        X(N_AT)         \
+        X(N_PARENS)     
 
 /* Types of nodes */
 typedef enum nodetype {

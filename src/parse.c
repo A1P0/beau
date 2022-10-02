@@ -14,6 +14,7 @@
 
 extern const char *tokstr[];
 extern const char *nodestr[];
+extern const bool TOKENTABLE;
 
 /* strings representing node types */
 const char *nodestr[] = {
@@ -35,6 +36,11 @@ plex(parser *p)
                 p->next->type = T_NONE;
                 p->next->line = p->l->line;
 
+        }
+
+        if (TOKENTABLE && p->curr != NULL) {
+                printf("%-12s%12d%24s\n",
+                        tokstr[p->curr->type], p->curr->line, p->curr->string);
         }
 }
 
@@ -132,12 +138,31 @@ vardef(parser *p)
         return n;
 }
 
+static node * /* "ret", [rvalue] */
+ret_stmt(parser *p)
+{
+        node *n = NULL;
+
+        if (p->curr->type != T_RET)
+                return NULL;
+
+        plex(p);
+
+        n = lalloc(sizeof(node));
+
+        n->type = N_RET;
+        n->right = rvalue(p);
+
+        return n;
+}
+
 /* label_stmt | block_stmt | if_stmt | while_stmt | switch_stmt
               | case_stmt | break_stmt | goto_stmt | ret_stmt | rval_stmt ; */
 static node * 
 statement(parser *p)
 {
         node *n = NULL;
+        node *nn = NULL;
         int line = 0;
 
         /* null statement */
@@ -162,12 +187,24 @@ statement(parser *p)
 
                 n = statement(p);
 
-                if (n != NULL)
-                        n->next = statement(p);
+                nn = n;
+                while (nn != NULL) {
 
-                if (p->curr->type != T_RBRACE)
+                        /* make skip to last node if block stmt */
+                        while (nn->next != NULL)
+                                nn = nn->next;
+
+                        nn->next = statement(p);
+
+                        nn = nn->next;
+
+                }
+
+                if (p->curr->type != T_RBRACE) {
+                        printf("wtf: %s\n", tokstr[p->curr->type]);
                         lfatal("%s: Line %d: Started block statement missing "
                                 "closing }.", p->l->name, line);
+                }
 
                 plex(p);
 
@@ -185,19 +222,22 @@ statement(parser *p)
 
         /* rval_stmt */
         n = rvalue(p);
-        if (n != NULL) {
+        if (n != NULL) goto done;
+        
+        /* ret_stmt */
+        n = ret_stmt(p);
+        if (n != NULL) goto done;
 
-                if (p->curr->type != T_SEMI)
-                        lfatal("%s: Line %d: Expecting a ; to end statement.",
-                                p->l->name,p->curr->line);
+        if (n == NULL)
+                return NULL;
 
-                plex(p);
+        done:
 
-                n->next = statement(p);
+        if (p->curr->type != T_SEMI)
+                lfatal("%s: Line %d: Expecting a ; to end statement.",
+                        p->l->name,p->curr->line);
 
-                return n;
-
-        }
+        plex(p);
 
         return n;
 }
@@ -372,6 +412,9 @@ parse(char *filename)
         p->curr = NULL;
         p->next = NULL;
 
+        if (TOKENTABLE)
+                printf("%-12s%12s%24s\n", "TOKEN TYPE", "LINE", "STRING");
+
         plex(p); plex(p);
         p->tree = root(p);
 
@@ -390,7 +433,12 @@ nprint(node *n, int indent)
 
         for (i=0;i<indent;i++) putchar('\t');
 
-        printf("%s\n", nodestr[n->type]);
+        printf("%s", nodestr[n->type]);
+
+        if (n->type == N_NAME)
+                printf(", '%s'", n->token->string);
+
+        printf("\n");
 
         if (n->left != NULL) {
 

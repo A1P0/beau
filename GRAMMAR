@@ -37,7 +37,6 @@ rvalue  = "(", rvalue, ")"
         | unary, rvalue
         | "%", lvalue
         | rvalue, binary, rvalue
-        | rvalue, "?", rvalue, ":", rvalue
         | rvalue, "(", { rvalue, { ",", rvalue  } }, ")" ;
 
 assign  = "="

@@ -4,12 +4,17 @@
  */
 #include <stdio.h>
 #include <getopt.h>
+#include <stdbool.h>
 #include "lone.h"
 #include "lex.h"
 #include "parse.h"
+#include "compile.h"
 
 /* How lone was invoked */
 char *arg0;
+/* flags for some options */
+bool TOKENTABLE = false;
+bool NODETREE = false;
 /* strings of token types for printing token table */
 extern char *tokstr[];
 
@@ -17,43 +22,23 @@ static void /* display options */
 help()
 {
         printf(
-                "Current options:\n\t-l [filename]\tPrints table of tokens "
-                "in current file.\n"
-                "\t-p [filename]\tParses input file and prints syntax tree.\n"
+                "Current options:\n"
+                "\t-c [filename]\tAttempt to compile said file.\n"
+                "\t-t\tPrint table of tokens encountered while compiling.\n"
+                "\t-n\tPrint tree of nodes encountered while compiling.\n"
         );
 }
 
-static void /* lex input file and print table of tokens */
-lexopt(char *filename)
-{
-        lexer *l;
-        tok *t;
-
-        l = lex_open(filename);
-
-        t = lex(l);
-
-        printf("%-12s%12s%24s\n", "TOKEN TYPE", "LINE", "STRING");
-
-        while (t != NULL) {
-
-                printf("%-12s%12d%24s\n", tokstr[t->type], t->line, t->string);
-
-                t = lex(l);
-                
-        }
-
-        lex_close(l);
-}
-
-static void /* parse input file and print syntax tree */
-parseopt(char *filename)
+void compileopt(char *filename)
 {
         node *tree;
 
         tree = parse(filename);
 
-        nprint(tree, 0);
+        if (NODETREE)
+                nprint(tree, 0);
+
+        compile(tree, filename);
 }
 
 int /* volatile testing */
@@ -63,7 +48,7 @@ main(int argc, char *argv[])
 
         arg0 = argv[0];
 
-        while ((opt = getopt(argc, argv, "-:hl:p:")) != -1)  {
+        while ((opt = getopt(argc, argv, "-:htnc:")) != -1)  {
 
                 switch (opt) {
 
@@ -71,13 +56,17 @@ main(int argc, char *argv[])
                         help();
                         return 0;
 
-                case 'l':
-                        lexopt(optarg);
-                        return 0;
+                case 't':
+                        TOKENTABLE = true;
+                        break;
 
-                case 'p':
-                        parseopt(optarg);
-                        return 0;
+                case 'n':
+                        NODETREE = true;
+                        break;
+
+                case 'c':
+                        compileopt(optarg);
+                        break;
 
                 case '?':
                         lfatal("Unknown option '%c' supplied.",
@@ -96,8 +85,6 @@ main(int argc, char *argv[])
                 }
 
         }
-
-        help();
 
         return 0;
 }

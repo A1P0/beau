@@ -165,7 +165,7 @@ unary(parser *p)
 {
         node *n = NULL;
         node *r = NULL;
-        toktype t;
+        toktype t = N_NONE;
 
         if (p->curr->type != T_NOT && p->curr->type != T_MINUS)
                 return NULL;
@@ -185,7 +185,16 @@ unary(parser *p)
         if (t == T_NOT)
                 n->type = N_UNARY_NOT;
         else
-                n->type == N_UNARY_MINUS;
+                n->type = N_UNARY_MINUS;
+
+        if (r->left != NULL) {
+
+                n->right = r->left;
+                r->left = n;
+
+                return r;
+
+        }
 
         n->right = r;
 
@@ -277,7 +286,7 @@ binary(parser *p, node *l)
                 lfatal("%s: Line %d: Expecting an rvalue on right side of "
                         "binary operator.", p->l->name, p->curr->line);
 
-        if (precedence(n->type) > precedence(r->type)) {
+        if (precedence(n->type) >= precedence(r->type)) {
 
                 n->right = r->left;
                 r->left = n;
@@ -288,6 +297,88 @@ binary(parser *p, node *l)
 
         n->right = r;
 
+
+        return n;
+}
+
+static node * /* "(", rvalue, ")" */
+parens(parser *p)
+{
+        node *n = NULL;
+        node *r = NULL;
+
+        if (p->curr->type != T_LPAREN)
+                return NULL;
+
+        plex(p);
+
+        r = rvalue(p);
+
+        if (r == NULL)
+                lfatal("%s: Line %d: Expecting an rvalue inside of ( ).",
+                        p->l->name, p->curr->line);
+
+        if (p->curr->type != T_RPAREN)
+                lfatal("%s: Line %d: Missing ).",
+                        p->l->name, p->curr->line);
+
+        plex(p);
+
+        n = lalloc(sizeof(node));
+
+        n->type = N_PARENS;
+        n->middle = r;
+
+        return n;
+}
+
+static node * /* rvalue, "(", { rvalue, { ",", rvalue  } }, ")" */
+funcall(parser *p, node *l)
+{
+        node *n = NULL;
+        node *nn = NULL;
+
+        if (p->curr->type != T_LPAREN)
+                return NULL;
+
+        plex(p);
+
+        n = lalloc(sizeof(node));
+
+        n->type = N_FUNCALL;
+        n->left = l;
+
+        if (p->curr->type == T_RPAREN) {
+
+                /* no arguments */
+                plex(p);
+
+                n->right = NULL;
+
+                return n;
+
+        }
+
+        n->right = rvalue(p);
+        nn = n->right;
+
+        while (nn != NULL) {
+
+                if (p->curr->type != T_COMMA) 
+                        break;
+
+                plex(p);
+
+                nn->next = rvalue(p);
+
+                nn = nn->next;
+        }
+
+        if (p->curr->type != T_RPAREN)
+                lfatal("%s: Line %d: Expecting ) to end function call.",
+                        p->l->name, p->curr->line);
+
+        plex(p);
 
         return n;
 }
@@ -339,17 +430,26 @@ rvalue(parser *p)
 
         }
 
-        /* check for a literal as well if nothing yet */
+        /* check for a literal */
         if (rval == NULL) rval = literal(p);
+
+        /* check for paren expression */
+        if (rval == NULL) rval = parens(p);
 
         /* if we still got nothing, we got nothing */
         if (rval == NULL)
                 return NULL;
 
-        /* Rules starting with rvalues */
+        /*
+         * Rules starting with rvalues
+         */
 
         /* rvalue, binary, rvalue */
         n = binary(p, rval);
+        if (n != NULL) return n;
+
+        /* rvalue, "(", { rvalue, { ",", rvalue  } }, ")" */
+        n = funcall(p, rval);
         if (n != NULL) return n;
 
         /* just an lvalue? */
