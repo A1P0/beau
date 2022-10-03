@@ -30,8 +30,8 @@ will have built-in data types that are named very clearly. `byte`, `word`,
 `dword`, `qword`. We know exactly the size of those values immediately. I chose
 this over the more common (lately) `i8` - `i64` simply for aesthetic purposes.
 Numbers in identifiers clutter appearance, and its not like we save that much
-space by saying `i8` over `byte` anyway, these keywords should only be used for
-definitions anyway.
+space by saying `i8` over `byte` anyway, these keywords are only being used for
+definitions.
 
 #### Pointer syntax
 Beau is meant to be clean and readable, so a change I've implemented for
@@ -60,7 +60,7 @@ code. At the moment the main example being `ret` for `return`.
 
 #### Example
 
-```C
+```Java
 include stdio;
 
 byte @ string: "Hello, World!";
