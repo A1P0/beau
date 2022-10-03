@@ -1,12 +1,12 @@
 /*
  * lex.c
- * Lexer for lone
+ * Lexer for beau
  */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-#include "lone.h"
+#include "beau.h"
 #include "lex.h"
 #include "tok.h"
 
@@ -30,7 +30,7 @@ getstr(lexer *l, tok *t)
 
         ret = ftell(l->file);
 
-        t->string = lalloc(t->length+1);
+        t->string = balloc(t->length+1);
 
         fseek(l->file, t->offset, SEEK_SET);
 
@@ -186,7 +186,7 @@ strlit(lexer *l, tok *t)
         }
 
         if (l->ch == EOF)
-                lfatal("%s: Line %d: String literal missing closing quote!",
+                bfatal("%s: Line %d: String literal missing closing quote!",
                         l->name, l->line);
 
         lgetc(l);
@@ -245,7 +245,7 @@ lex(lexer *l)
                         }
 
                         if (l->ch == EOF)
-                                lfatal("%s: Line %d: Comment not closed.",
+                                bfatal("%s: Line %d: Comment not closed.",
                                         l->name, l->line);
 
                         goto whitespace;
@@ -254,7 +254,7 @@ lex(lexer *l)
 
                 /* / or /= */
 
-                t = lalloc(sizeof(tok));
+                t = balloc(sizeof(tok));
 
                 t->line = l->line;
                 t->file = l->name;
@@ -271,7 +271,7 @@ lex(lexer *l)
                 return t;
         }
 
-        t = lalloc(sizeof(tok));
+        t = balloc(sizeof(tok));
 
         t->line = l->line;
         t->file = l->name;
@@ -516,12 +516,12 @@ lex_open(char *filename)
 {
         lexer *l;
 
-        l = lalloc(sizeof(lexer));
+        l = balloc(sizeof(lexer));
 
         l->file = fopen(filename, "r");
 
         if (l->file == NULL)
-                lfatal("Unable to open '%s': %s", filename, strerror(errno));
+                bfatal("Unable to open '%s': %s", filename, strerror(errno));
 
         l->name = filename;
 

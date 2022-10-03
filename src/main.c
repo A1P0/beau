@@ -5,12 +5,12 @@
 #include <stdio.h>
 #include <getopt.h>
 #include <stdbool.h>
-#include "lone.h"
+#include "beau.h"
 #include "lex.h"
 #include "parse.h"
 #include "compile.h"
 
-/* How lone was invoked */
+/* How beau was invoked */
 char *arg0;
 /* flags for some options */
 bool TOKENTABLE = false;
@@ -69,17 +69,17 @@ main(int argc, char *argv[])
                         break;
 
                 case '?':
-                        lfatal("Unknown option '%c' supplied.",
+                        bfatal("Unknown option '%c' supplied.",
                                 optopt);
                         break;
 
                 case ':':
-                        lfatal("Missing argument for option '%c'.",
+                        bfatal("Missing argument for option '%c'.",
                                 optopt);
                         break;
 
                 case 1:
-                        lfatal("Unexpected argument '%s'.", optarg);
+                        bfatal("Unexpected argument '%s'.", optarg);
                         break;
                         
                 }

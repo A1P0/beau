@@ -1,13 +1,13 @@
 /*
  * scope.c
- * Symbols and scoping for lone
+ * Symbols and scoping for beau
  */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <llvm-c/Core.h>
 #include <llvm-c/Types.h>
-#include "lone.h"
+#include "beau.h"
 #include "sym.h"
 /* symbols */
 sym *SYMS = NULL;

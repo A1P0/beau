@@ -1,11 +1,11 @@
 /*
  * parse.c
- * Parser for lone
+ * Parser for beau
  */
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "lone.h"
+#include "beau.h"
 #include "lex.h"
 #include "tok.h"
 #include "node.h"
@@ -31,17 +31,16 @@ plex(parser *p)
 
         if (p->next == NULL) {
 
-                p->next = lalloc(sizeof(tok));
+                p->next = balloc(sizeof(tok));
 
                 p->next->type = T_NONE;
                 p->next->line = p->l->line;
 
         }
 
-        if (TOKENTABLE && p->curr != NULL) {
+        if (TOKENTABLE && p->curr != NULL)
                 printf("%-12s%12d%24s\n",
                         tokstr[p->curr->type], p->curr->line, p->curr->string);
-        }
 }
 
 node * /* num_lit | char_lit | str_lit | bool_lit | "null" ; */
@@ -54,9 +53,11 @@ literal(parser *p)
         case T_DEC_LIT: case T_CHAR_LIT: case T_STR_LIT: case T_TRUE:
         case T_FALSE: case T_NULL:
 
-                n = lalloc(sizeof(node));
+                n = balloc(sizeof(node));
+
                 n->type = N_LITERAL;
                 n->token = p->curr;
+
                 plex(p);
 
         }
@@ -75,10 +76,10 @@ include(parser *p)
         plex(p);
 
         if (p->curr->type != T_NAME && p->curr->type != T_STR_LIT)
-                lfatal("%s: Line %d: Expecting a name or string in include "
+                bfatal("%s: Line %d: Expecting a name or string in include "
                         "statement.", p->l->name, p->curr->line);
 
-        n = lalloc(sizeof(node));
+        n = balloc(sizeof(node));
 
         n->type = N_INCLUDE;
         n->token = p->curr;
@@ -86,7 +87,7 @@ include(parser *p)
         plex(p);
 
         if (p->curr->type != T_SEMI)
-                lfatal("%s: Line %d: Expecting a ; to end include statement. ",
+                bfatal("%s: Line %d: Expecting a ; to end include statement. ",
                         p->l->name, n->token->line);
 
         plex(p);
@@ -102,7 +103,7 @@ vardef(parser *p)
         if (p->curr->type != T_NAME)
                 return NULL;
 
-        n = lalloc(sizeof(node));
+        n = balloc(sizeof(node));
 
         n->token = p->curr;
         n->datatype = p->curr->string;
@@ -119,7 +120,7 @@ vardef(parser *p)
         }
 
         if (p->curr->type != T_NAME)
-                lfatal("%s: Line %d: Expecting a name for definition.",
+                bfatal("%s: Line %d: Expecting a name for definition.",
                         p->l->name, p->curr->line);
 
         n->name = p->curr->string;
@@ -132,7 +133,7 @@ vardef(parser *p)
         n->middle = literal(p);
 
         if (n->middle == NULL)
-                lfatal("%s: Line %d: Expecting a literal at end of definition.",
+                bfatal("%s: Line %d: Expecting a literal at end of definition.",
                         p->l->name, p->curr->line);
 
         return n;
@@ -148,7 +149,7 @@ ret_stmt(parser *p)
 
         plex(p);
 
-        n = lalloc(sizeof(node));
+        n = balloc(sizeof(node));
 
         n->type = N_RET;
         n->right = rvalue(p);
@@ -170,7 +171,7 @@ statement(parser *p)
 
                 plex(p);
 
-                n = lalloc(sizeof(node));
+                n = balloc(sizeof(node));
 
                 n->type = N_NONE;
 
@@ -202,7 +203,7 @@ statement(parser *p)
 
                 if (p->curr->type != T_RBRACE) {
                         printf("wtf: %s\n", tokstr[p->curr->type]);
-                        lfatal("%s: Line %d: Started block statement missing "
+                        bfatal("%s: Line %d: Started block statement missing "
                                 "closing }.", p->l->name, line);
                 }
 
@@ -210,7 +211,7 @@ statement(parser *p)
 
                 if (n == NULL) {
 
-                        n = lalloc(sizeof(node));
+                        n = balloc(sizeof(node));
 
                         n->type = N_NONE;
 
@@ -234,7 +235,7 @@ statement(parser *p)
         done:
 
         if (p->curr->type != T_SEMI)
-                lfatal("%s: Line %d: Expecting a ; to end statement.",
+                bfatal("%s: Line %d: Expecting a ; to end statement.",
                         p->l->name,p->curr->line);
 
         plex(p);
@@ -251,7 +252,7 @@ definition(parser *p)
         if (p->curr->type != T_NAME)
                 return NULL;
 
-        n = lalloc(sizeof(node));
+        n = balloc(sizeof(node));
         
         n->token = p->curr;
         n->datatype = p->curr->string;
@@ -268,7 +269,7 @@ definition(parser *p)
         }
 
         if (p->curr->type != T_NAME)
-                lfatal("%s: Line %d: Expecting a name for definition.",
+                bfatal("%s: Line %d: Expecting a name for definition.",
                         p->l->name, p->curr->line);
 
         n->name = p->curr->string;
@@ -305,7 +306,7 @@ definition(parser *p)
 
                 /* ) */
                 if (p->curr->type != T_RPAREN)
-                        lfatal("%s: Line %d: Missing closing ) in function "
+                        bfatal("%s: Line %d: Missing closing ) in function "
                                 "definition." , p->l->name, p->curr->line);
 
                 plex(p);
@@ -320,7 +321,7 @@ definition(parser *p)
                 }
 
                 if (p->curr->type != T_COLON)
-                        lfatal("%s: Line %d: Expecting ; or : in function "
+                        bfatal("%s: Line %d: Expecting ; or : in function "
                                 "definition.", p->l->name, p->curr->line);
 
                 plex(p);
@@ -333,7 +334,7 @@ definition(parser *p)
 
         /* extended variable definition? */
         if (p->curr->type != T_COLON)
-                lfatal("%s: Line %d: Expecting a ; to end definition or a : "
+                bfatal("%s: Line %d: Expecting a ; to end definition or a : "
                         "to initialize." , p->l->name, p->curr->line);
 
         plex(p);
@@ -341,11 +342,11 @@ definition(parser *p)
         n->middle = literal(p);
 
         if (n->middle == NULL)
-                lfatal("%s: Line %d: A literal is required to initialize a "
+                bfatal("%s: Line %d: A literal is required to initialize a "
                         "variable.", p->l->name, p->curr->line);
 
         if (p->curr->type != T_SEMI)
-                lfatal("%s: Line %d: Expecting a ; to end definition",
+                bfatal("%s: Line %d: Expecting a ; to end definition",
                         p->l->name, p->curr->line);
 
         plex(p);
@@ -405,7 +406,7 @@ parse(char *filename)
 {
         parser *p;
 
-        p = lalloc(sizeof(parser));
+        p = balloc(sizeof(parser));
 
         p->l = lex_open(filename);
 

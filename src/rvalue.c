@@ -1,9 +1,9 @@
 /*
  * rvalue.c
- * rvalue parsing for lone
+ * rvalue parsing for beau
  */
 #include <stdio.h>
-#include "lone.h"
+#include "beau.h"
 #include "parse.h"
 #include "node.h"
 #include "tok.h"
@@ -22,7 +22,7 @@ lvalue(parser *p)
 
                 plex(p);
 
-                n = lalloc(sizeof(node));
+                n = balloc(sizeof(node));
 
                 n->type = N_AT;
                 n->token = p->curr;
@@ -30,7 +30,7 @@ lvalue(parser *p)
                 r = rvalue(p);
 
                 if (r == NULL)
-                        lfatal("%s: Line %d: Expecting rvalue after @.",
+                        bfatal("%s: Line %d: Expecting rvalue after @.",
                                 p->l->name, p->curr->line);
 
                 n->right = r;
@@ -42,7 +42,7 @@ lvalue(parser *p)
         /* name */
         if (p->curr->type == T_NAME) {
 
-                n = lalloc(sizeof(node));
+                n = balloc(sizeof(node));
 
                 n->type = N_NAME;
                 n->token = p->curr;
@@ -70,10 +70,10 @@ addressof(parser *p)
         lval = lvalue(p);
 
         if (lval == NULL)
-                lfatal("%s: Line %d: Expecting lvalue as operand of %.",
+                bfatal("%s: Line %d: Expecting lvalue as operand of %.",
                         p->l->name, p->curr->line);
 
-        n = lalloc(sizeof(node));
+        n = balloc(sizeof(node));
 
         n->type = N_ADDRESSOF;
         n->right = lval;
@@ -90,7 +90,7 @@ prefix_incdec(parser *p)
         if (p->curr->type != T_INC && p->curr->type != T_DEC)
                 return NULL;
 
-        n = lalloc(sizeof(node));
+        n = balloc(sizeof(node));
 
         if (p->curr->type == T_INC)
                 n->type = N_INC;
@@ -102,7 +102,7 @@ prefix_incdec(parser *p)
         lval = lvalue(p);
 
         if (lval == NULL)
-                lfatal("%s: Line %d: Expecting lvalue as operand of "
+                bfatal("%s: Line %d: Expecting lvalue as operand of "
                         "prefix increment operator.", p->l->name,
                         p->curr->line);
 
@@ -119,7 +119,7 @@ postfix_incdec(parser *p, node *lval)
         if (p->curr->type != T_INC && p->curr->type != T_DEC)
                 return NULL;
 
-        n = lalloc(sizeof(node));
+        n = balloc(sizeof(node));
 
         if (p->curr->type == T_INC)
                 n->type = N_INC;
@@ -142,7 +142,7 @@ assign(parser *p, node *lval)
         if (!(p->curr->type >= T_ASSIGN && p->curr->type <= T_ASSIGN_OR))
                 return NULL;
 
-        n = lalloc(sizeof(node));
+        n = balloc(sizeof(node));
 
         n->type = N_ASSIGN;
         n->token = p->curr;
@@ -153,7 +153,7 @@ assign(parser *p, node *lval)
         n->right = rvalue(p);
 
         if (n->right == NULL)
-                lfatal("%s: Line %d: Expecting an rvalue on "
+                bfatal("%s: Line %d: Expecting an rvalue on "
                         "right side of assignment.",
                         p->l->name, p->curr->line);
 
@@ -177,10 +177,10 @@ unary(parser *p)
         r = rvalue(p);
 
         if (r == NULL)
-                lfatal("%s: Line %d: Expecting an rvalue as operand of unary "
+                bfatal("%s: Line %d: Expecting an rvalue as operand of unary "
                         "operation.", p->l->name, p->curr->line);
 
-        n = lalloc(sizeof(node));
+        n = balloc(sizeof(node));
 
         if (t == T_NOT)
                 n->type = N_UNARY_NOT;
@@ -273,7 +273,7 @@ binary(parser *p, node *l)
 
         if (t == N_NONE) return NULL;
 
-        n = lalloc(sizeof(node));
+        n = balloc(sizeof(node));
 
         n->type = t;
         n->token = p->curr;
@@ -283,7 +283,7 @@ binary(parser *p, node *l)
         r = rvalue(p);
 
         if (r == NULL)
-                lfatal("%s: Line %d: Expecting an rvalue on right side of "
+                bfatal("%s: Line %d: Expecting an rvalue on right side of "
                         "binary operator.", p->l->name, p->curr->line);
 
         if (precedence(n->type) >= precedence(r->type)) {
@@ -315,16 +315,16 @@ parens(parser *p)
         r = rvalue(p);
 
         if (r == NULL)
-                lfatal("%s: Line %d: Expecting an rvalue inside of ( ).",
+                bfatal("%s: Line %d: Expecting an rvalue inside of ( ).",
                         p->l->name, p->curr->line);
 
         if (p->curr->type != T_RPAREN)
-                lfatal("%s: Line %d: Missing ).",
+                bfatal("%s: Line %d: Missing ).",
                         p->l->name, p->curr->line);
 
         plex(p);
 
-        n = lalloc(sizeof(node));
+        n = balloc(sizeof(node));
 
         n->type = N_PARENS;
         n->middle = r;
@@ -343,7 +343,7 @@ funcall(parser *p, node *l)
 
         plex(p);
 
-        n = lalloc(sizeof(node));
+        n = balloc(sizeof(node));
 
         n->type = N_FUNCALL;
         n->left = l;
@@ -375,7 +375,7 @@ funcall(parser *p, node *l)
         }
 
         if (p->curr->type != T_RPAREN)
-                lfatal("%s: Line %d: Expecting ) to end function call.",
+                bfatal("%s: Line %d: Expecting ) to end function call.",
                         p->l->name, p->curr->line);
 
         plex(p);
@@ -392,7 +392,6 @@ funcall(parser *p, node *l)
         | unary, rvalue
         | "%", lvalue
         | rvalue, binary, rvalue
-        | rvalue, "?", rvalue, ":", rvalue
         | rvalue, "(", { rvalue, { ",", rvalue  } }, ")" ; */
 node *
 rvalue(parser *p)

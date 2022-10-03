@@ -7,7 +7,7 @@
 #include <llvm-c/Target.h>
 #include <llvm-c/Types.h>
 #include <llvm-c/TargetMachine.h>
-#include "lone.h"
+#include "beau.h"
 #include "node.h"
 #include "type.h"
 #include "sym.h"
@@ -41,18 +41,18 @@ globalvardef(node *n)
 
         s = sym_search(n->name, NULL);
         if (s != NULL)
-                lfatal("%s: Line %d: Referenced symbol already defined.",
+                bfatal("%s: Line %d: Referenced symbol already defined.",
                         filename, n->token->line);
 
         t = type_search(n->datatype);
 
         if (t == NULL)
-                lfatal("%s: Line %d: Referenced type doesn't exist.",
+                bfatal("%s: Line %d: Referenced type doesn't exist.",
                         filename, n->token->line);
 
         global = LLVMAddGlobal(module, t->type, n->name);
 
-        s = lalloc(sizeof(sym));
+        s = balloc(sizeof(sym));
         
         s->name = n->name;
         s->datatype = t;

@@ -1,6 +1,6 @@
 /*
  * tok.h
- * Token definitions for L1
+ * Token definitions for beau
  */
 #ifndef _TOK_H_
 #define _TOK_H_

@@ -1,6 +1,6 @@
 /*
  * lex.h
- * Definitions for lone lexer
+ * Definitions for beau lexer
  */
 #ifndef _LEX_H_
 #define _LEX_H_

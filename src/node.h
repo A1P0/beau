@@ -1,6 +1,6 @@
 /*
  * node.h
- * Node definitions for L1
+ * Node definitions for beau
  */
 #ifndef _NODE_H_
 #define _NODE_H_

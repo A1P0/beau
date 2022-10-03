@@ -1,6 +1,6 @@
 /*
  * parse.h
- * Definitions for lone parser
+ * Definitions for beau parser
  */
 #ifndef _PARSE_H_
 #define _PARSE_H_

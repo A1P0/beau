@@ -1,26 +1,31 @@
-# Lone/L1
-###### **L**anguage **one**, L1
+<div align="center">
+        <img src="head.png" width="200">
+        <h1>Beau</h1>
+</div>
 
-L1 is a language I am defining and implementing for learning purposes,
-but also an interest in seeing some of my ideas applied. L1 will be very C-like,
-I intend to match C's capability with some unique style.
+###### Match C's capability in style
 
-## TODO
+Beau is a language I am defining and implementing for learning purposes,
+but also an interest in seeing some of my ideas applied. Beau will match C's
+capability in style. I want a utilitarian systems language that is pleasing to
+the eye.
 
-- [x] Define a grammar to start with
-- [x] Lexer
-        - Some little bits missing that will be completed at a later stage.
-- [ ] Parser
-- [ ] Code generation
+Some of the ideas I've brought to the language are originally inspired by the
+original B language but with my own twist. 
 
-## Grammar
+### Status
+
+Mostly complete front end, working on a simple back end with LLVM to get a
+compiler up and running.
+
+### Grammar
 
 Check the EBNF grammar in `GRAMMAR`.
 
-## Examples
+### Examples
 
-Check some examples of what I'm going for in `examples.l1`.
+Check some examples of what I'm going for in `examples.b`.
 
-## License
+### License
 
 BSD 3-Clause License, see `LICENSE`.

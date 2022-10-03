@@ -1,6 +1,6 @@
 /*
- * lone.c
- * Utilities for the rest of lone
+ * beau.c
+ * Utilities for the rest of the beau compiler
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,7 +12,7 @@
 extern char *arg0;
 
 void /* General error printing routine */
-lerror(const char *format, ...)
+berror(const char *format, ...)
 {
         va_list args;
 
@@ -26,7 +26,7 @@ lerror(const char *format, ...)
 }
 
 void /* Fatal error */
-lfatal(const char *format, ...)
+bfatal(const char *format, ...)
 {
         va_list args;
 
@@ -43,14 +43,14 @@ lfatal(const char *format, ...)
 }
 
 void * /* Easy allocation with null check */
-lalloc(size_t s)
+balloc(size_t s)
 {
         void *p;
 
         p = calloc(1, s);
 
         if (p == NULL)
-                lfatal("Failure to allocate memory: %s", strerror(errno));
+                bfatal("Failure to allocate memory: %s", strerror(errno));
 
         return p;
 }

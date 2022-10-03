@@ -7,7 +7,7 @@
 #include <string.h>
 #include <llvm-c/Types.h>
 #include <llvm-c/Core.h>
-#include "lone.h"
+#include "beau.h"
 #include "type.h"
 
 type *TYPES;
@@ -36,7 +36,7 @@ type_init()
 {
         type *t;
         
-        TYPES = lalloc(sizeof(type));
+        TYPES = balloc(sizeof(type));
 
         t = TYPES;
 
@@ -44,7 +44,7 @@ type_init()
         t->type = LLVMVoidType();
         t->name = "void";
 
-        t->next = lalloc(sizeof(type));
+        t->next = balloc(sizeof(type));
         t = t->next;
 
         /* byte */
@@ -52,7 +52,7 @@ type_init()
         t->sign = true;
         t->name = "byte";
 
-        t->next = lalloc(sizeof(type));
+        t->next = balloc(sizeof(type));
         t = t->next;
 
         /* ubyte */
@@ -60,7 +60,7 @@ type_init()
         t->sign = false;
         t->name = "ubyte";
 
-        t->next = lalloc(sizeof(type));
+        t->next = balloc(sizeof(type));
         t = t->next;
 
         /* word */
@@ -68,7 +68,7 @@ type_init()
         t->sign = true;
         t->name = "word";
 
-        t->next = lalloc(sizeof(type));
+        t->next = balloc(sizeof(type));
         t = t->next;
 
         /* uword */
@@ -76,7 +76,7 @@ type_init()
         t->sign = false;
         t->name = "uword";
 
-        t->next = lalloc(sizeof(type));
+        t->next = balloc(sizeof(type));
         t = t->next;
 
         /* dword */
@@ -84,7 +84,7 @@ type_init()
         t->sign = true;
         t->name = "dword";
 
-        t->next = lalloc(sizeof(type));
+        t->next = balloc(sizeof(type));
         t = t->next;
 
         /* udword */
@@ -92,7 +92,7 @@ type_init()
         t->sign = false;
         t->name = "udword";
 
-        t->next = lalloc(sizeof(type));
+        t->next = balloc(sizeof(type));
         t = t->next;
 
         /* qword */
@@ -100,7 +100,7 @@ type_init()
         t->sign = true;
         t->name = "qword";
 
-        t->next = lalloc(sizeof(type));
+        t->next = balloc(sizeof(type));
         t = t->next;
 
         /* uqword */

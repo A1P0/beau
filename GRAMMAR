@@ -1,4 +1,4 @@
-(* L1 EBNF grammar *)
+(* Beau EBNF grammar *)
 
 program = { definition | include } ;
 
