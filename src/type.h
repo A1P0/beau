@@ -5,11 +5,9 @@
 #ifndef _TYPE_H_
 #define _TYPE_H_
 #include <stdbool.h>
-#include <llvm-c/Types.h>
-#include <llvm-c/Core.h>
 
 typedef struct type {
-        LLVMTypeRef type;
+        
         bool sign;
         char *name;
         struct type *next;

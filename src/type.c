@@ -5,8 +5,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
-#include <llvm-c/Types.h>
-#include <llvm-c/Core.h>
 #include "beau.h"
 #include "type.h"
 
@@ -41,14 +39,14 @@ type_init()
         t = TYPES;
 
         /* void */
-        t->type = LLVMVoidType();
+        // t->type = ;
         t->name = "void";
 
         t->next = balloc(sizeof(type));
         t = t->next;
 
         /* byte */
-        t->type = LLVMInt8Type();
+        // t->type = ;
         t->sign = true;
         t->name = "byte";
 
@@ -56,7 +54,7 @@ type_init()
         t = t->next;
 
         /* ubyte */
-        t->type = LLVMInt8Type();
+        // t->type = ;
         t->sign = false;
         t->name = "ubyte";
 
@@ -64,7 +62,7 @@ type_init()
         t = t->next;
 
         /* word */
-        t->type = LLVMInt16Type();
+        // t->type = ;
         t->sign = true;
         t->name = "word";
 
@@ -72,7 +70,7 @@ type_init()
         t = t->next;
 
         /* uword */
-        t->type = LLVMInt16Type();
+        // t->type = ;
         t->sign = false;
         t->name = "uword";
 
@@ -80,7 +78,7 @@ type_init()
         t = t->next;
 
         /* dword */
-        t->type = LLVMInt32Type();
+        // t->type = ;
         t->sign = true;
         t->name = "dword";
 
@@ -88,7 +86,7 @@ type_init()
         t = t->next;
 
         /* udword */
-        t->type = LLVMInt32Type();
+        // t->type = ;
         t->sign = false;
         t->name = "udword";
 
@@ -96,7 +94,7 @@ type_init()
         t = t->next;
 
         /* qword */
-        t->type = LLVMInt64Type();
+        // t->type = ;
         t->sign = true;
         t->name = "qword";
 
@@ -104,7 +102,7 @@ type_init()
         t = t->next;
 
         /* uqword */
-        t->type = LLVMInt64Type();
+        // t->type = ;
         t->sign = false;
         t->name = "uqword";
 }

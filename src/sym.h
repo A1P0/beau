@@ -5,8 +5,6 @@
 #ifndef _SCOPE_H_
 #define _SCOPE_H_
 #include <stdbool.h>
-#include <llvm-c/Core.h>
-#include <llvm-c/Types.h>
 #include "type.h"
 /* Symbol types */
 typedef enum symtype {
@@ -23,7 +21,7 @@ typedef struct sym {
         type *datatype;
         symtype type;
         bool pointer;
-        LLVMValueRef value;
+
         struct sym *child;
         struct sym *last;
         struct sym *next;

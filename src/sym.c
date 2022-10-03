@@ -5,10 +5,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <llvm-c/Core.h>
-#include <llvm-c/Types.h>
 #include "beau.h"
 #include "sym.h"
+
 /* symbols */
 sym *SYMS = NULL;
 static sym *last = NULL;
