@@ -1,6 +1,6 @@
 /*
  * lex.c
- * Lexer for beau
+ * Lexer for Beau
  */
 #include <stdio.h>
 #include <stdlib.h>

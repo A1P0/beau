@@ -1,6 +1,6 @@
 /*
  * beau.h
- * Definitions of utilities for the beau compiler
+ * Definitions of utilities for the Beau compiler
  */
 #ifndef _BEAU_H_
 #define _BEAU_H_

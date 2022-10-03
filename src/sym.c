@@ -1,6 +1,6 @@
 /*
  * scope.c
- * Symbols and scoping for beau
+ * Symbols and scoping for Beau
  */
 #include <stdio.h>
 #include <stdlib.h>

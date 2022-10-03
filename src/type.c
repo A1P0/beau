@@ -1,6 +1,6 @@
 /*
  * type.c
- * Type handling for lone
+ * Type handling for Beau
  */
 #include <stdio.h>
 #include <stdbool.h>
@@ -39,14 +39,14 @@ type_init()
         t = TYPES;
 
         /* void */
-        // t->type = ;
+        t->type = B_VOID;
         t->name = "void";
 
         t->next = balloc(sizeof(type));
         t = t->next;
 
         /* byte */
-        // t->type = ;
+        t->type = B_BYTE;
         t->sign = true;
         t->name = "byte";
 
@@ -54,7 +54,7 @@ type_init()
         t = t->next;
 
         /* ubyte */
-        // t->type = ;
+        t->type = B_BYTE;
         t->sign = false;
         t->name = "ubyte";
 
@@ -62,7 +62,7 @@ type_init()
         t = t->next;
 
         /* word */
-        // t->type = ;
+        t->type = B_WORD;
         t->sign = true;
         t->name = "word";
 
@@ -70,7 +70,7 @@ type_init()
         t = t->next;
 
         /* uword */
-        // t->type = ;
+        t->type = B_WORD;
         t->sign = false;
         t->name = "uword";
 
@@ -78,7 +78,7 @@ type_init()
         t = t->next;
 
         /* dword */
-        // t->type = ;
+        t->type = B_DWORD;
         t->sign = true;
         t->name = "dword";
 
@@ -86,7 +86,7 @@ type_init()
         t = t->next;
 
         /* udword */
-        // t->type = ;
+        t->type = B_DWORD;
         t->sign = false;
         t->name = "udword";
 
@@ -94,7 +94,7 @@ type_init()
         t = t->next;
 
         /* qword */
-        // t->type = ;
+        t->type = B_QWORD;
         t->sign = true;
         t->name = "qword";
 
@@ -102,7 +102,7 @@ type_init()
         t = t->next;
 
         /* uqword */
-        // t->type = ;
+        t->type = B_QWORD;
         t->sign = false;
         t->name = "uqword";
 }

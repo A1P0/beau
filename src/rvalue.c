@@ -1,6 +1,6 @@
 /*
  * rvalue.c
- * rvalue parsing for beau
+ * rvalue parsing for Beau
  */
 #include <stdio.h>
 #include "beau.h"

@@ -19,7 +19,7 @@ bin/parse.o: src/parse.c
 bin/rvalue.o: src/rvalue.c
 	cc -c src/rvalue.c -o bin/rvalue.o
 
-bin/compile.o: src/compile.c
+bin/qbe.o: src/qbe.c
 	cc -c src/compile.c -o bin/compile.o
 
 bin/type.o: src/type.c

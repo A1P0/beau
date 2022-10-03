@@ -1,6 +1,6 @@
 /*
  * beau.c
- * Utilities for the rest of the beau compiler
+ * Utilities for the rest of the Beau compiler
  */
 #include <stdio.h>
 #include <stdlib.h>

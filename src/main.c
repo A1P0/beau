@@ -8,7 +8,7 @@
 #include "beau.h"
 #include "lex.h"
 #include "parse.h"
-#include "compile.h"
+#include "qbe.h"
 
 /* How beau was invoked */
 char *arg0;

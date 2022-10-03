@@ -1,6 +1,6 @@
 /*
  * node.h
- * Node definitions for beau
+ * Node definitions for Beau
  */
 #ifndef _NODE_H_
 #define _NODE_H_

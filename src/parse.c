@@ -1,6 +1,6 @@
 /*
  * parse.c
- * Parser for beau
+ * Parser for Beau
  */
 #include <stdio.h>
 #include <stdlib.h>
